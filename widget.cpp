@@ -3,3 +3,8 @@
 Widget::Widget(int _x, int _y, int _sx, int _sy):
     x(_x), y(_y), sx(_sx), sy(_sy)
 {}
+
+bool Widget::is_selected(int mx, int my)
+{
+    return mx > x && mx < x+sx && my > y && my < y+sy;
+}
