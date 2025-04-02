@@ -12,9 +12,10 @@ const int szelesseg = 600, magassag = 600;
 int main()
 {
     gout.open(szelesseg, magassag);
+    gout.load_font("LiberationMono-Regular.ttf", 20);
 
-    NumberBox *nb1 = new NumberBox(50, 100, 100, 50, 0, 1000000);
-    NumberBox *nb2 = new NumberBox(200, 100, 100, 50, -500000, 500000);
+    NumberBox *nb1 = new NumberBox(50, 50, 100, 50, 0, 2000000000);
+    NumberBox *nb2 = new NumberBox(50, 150, 100, 50, -500000, 500000);
 
     vector<Widget*> widgets;
     widgets.push_back(nb1);
@@ -24,6 +25,11 @@ int main()
 
     event ev;
     int focus = -1;
+
+    for (Widget * w: widgets)
+        w->draw();
+
+    gout << refresh;
 
     while(gin >> ev)
     {

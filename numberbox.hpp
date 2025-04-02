@@ -8,12 +8,14 @@ class NumberBox : public Widget
 {
 protected:
     int ertek, minErtek, maxErtek;
+    int arrowX, arrowW, arrowH; // arrow buttons
 public:
-    NumberBox(int x, int y, int sx, int sy, int minErtek, int maxErtek);
+    NumberBox(int _x, int _y, int _sx, int _sy, int minErtek, int maxErtek);
 
     void draw() const override;
     void handle(genv::event event) override;
 
+    void arrowPressed(int mx, int my);
     void setNum(int newNum);
     void novelNum();
     void csokkentNum();
@@ -23,11 +25,13 @@ public:
 
 /*
 TODO:
+ * kitörölni rendesen, amikor nincs benne érték
+    * pl 0-val jelenjen meg, de amikor belekattintok, akkor tűnjön el (+ amikor odáig törlök, akkor is)
  * belekattintas -> a végére lehessen írni és egérrel mozgatni a cursort? (megkérdezni gyakvezt)
-    * sima cursor legyen benne? (pl belekattintaskor megjelenik és a szám végén van mindig)
- * max és min. num, hogy ne menjen ki az int határból
+
  * negatív számok beírásakot -> külön érzékelni, hogy a minusz gomb meg lett nyomba és úgy kezelni
     * is_negative bool -> mező?
- * egyéb grafikai szépítések: border, szebb gombok
- * Max/Min: így működjön, vagy ha nagyobb/kisebb lenne a szám, akkor ne lehessen többet írni?
+
+ * egyéb grafikai szépítések: border, szebb gombok (gomb hover)
+ * külön tárolni a fel/le gombok helyét és külön check-elni, hogy azokra lett-e kattintva (külön fv)
 */
