@@ -6,13 +6,15 @@
 using namespace genv;
 using namespace std;
 
-const color black(0,0,0), grey(200,200,200);
+const color black(0,0,0), grey(200,200,200), white(255,255,255);
 const int defaultMin = 0, defaultMax = 100000;
 const int padding = 5;
 
 NumberBox::NumberBox(int _x, int _y, int _sx, int _sy, int _minErtek, int _maxErtek):
     Widget(_x, _y, _sx, _sy), minErtek(_minErtek), maxErtek(_maxErtek)
 {
+    isNegative = false;
+
     arrowW = 30;
     arrowH = sy/2;
 
@@ -45,23 +47,30 @@ NumberBox::NumberBox(int _x, int _y, int _sx, int _sy, int _minErtek, int _maxEr
 void NumberBox::draw() const
 {
     // Draw main box background (number area + arrows)
-    gout << color(255, 255, 255) << move_to(x, y) << box(sx, sy);
+    gout << white << move_to(x, y) << box(sx, sy);
 
     int numH = gout.cascent();
-    // Draw number (centered vertically, left-aligned with padding)
-    gout << color(255, 0, 0)
-         << move_to(x + padding, y + sy/2 - numH/2)
-         << text(to_string(ertek));
-
-    // Draw cursor if it fits in number area
     int numW = gout.twidth("1");
-    int cursorX = x + padding + to_string(ertek).size() * numW;
-    if (cursorX < x + numW*to_string(ertek).size())
+
+    if (isNegative)
     {
         gout << black
-             << move_to(cursorX, y + padding)
-             << line(0, sy - 2*padding);
+             << move_to(x+padding, y + sy/2 - numH/2)
+             << text("-")
+             << move_to(x+padding + numW, y + sy/2 - numH/2)
+             << text(to_string(abs(ertek)));
     }
+    else
+    {
+        gout << black
+             << move_to(x+padding, y + sy/2 - numH/2)
+             << text(to_string(abs(ertek)));
+    }
+
+    // draw cursor
+    gout << black
+         << move_to(x+padding + to_string(ertek).size()*numW, y+5)
+         << line(0, sy-padding*2);
 
     // background for arrows
     gout << grey
@@ -104,6 +113,10 @@ void NumberBox::handle(event ev)
     if (ev.type == ev_mouse && ev.button == btn_left)
     {
         arrowPressed(ev.pos_x, ev.pos_y);
+        if (ertek < 0)
+            isNegative = true;
+        else
+            isNegative = false;
     }
     else if (ev.type == ev_key && ev.keycode > 0) // key felengedésnél ne fusson le megegyszer
     {        
@@ -112,8 +125,7 @@ void NumberBox::handle(event ev)
 
         if (ertek == 0 && ev.keyname == "-") // ez igy jo?
         {
-            if (minErtek < 0)
-                ertek = -ertek;
+            isNegative = !isNegative;
         }
 
 
@@ -129,7 +141,6 @@ void NumberBox::handle(event ev)
             }
         }
     }
-
 }
 
 void NumberBox::setNum(int newNum)

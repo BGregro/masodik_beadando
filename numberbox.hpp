@@ -9,6 +9,7 @@ class NumberBox : public Widget
 protected:
     int ertek, minErtek, maxErtek;
     int arrowX, arrowW, arrowH; // arrow buttons
+    bool isNegative;
 public:
     NumberBox(int _x, int _y, int _sx, int _sy, int minErtek, int maxErtek);
 
@@ -25,7 +26,8 @@ public:
 
 /*
 TODO:
- * kitörölni rendesen, amikor nincs benne érték
+ * bug: tele 9-essel valamit csinál
+ * kitörölni rendesen, amikor nincs benne érték?
     * pl 0-val jelenjen meg, de amikor belekattintok, akkor tűnjön el (+ amikor odáig törlök, akkor is)
  * belekattintas -> a végére lehessen írni és egérrel mozgatni a cursort? (megkérdezni gyakvezt)
 
