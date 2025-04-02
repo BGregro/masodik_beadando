@@ -7,9 +7,9 @@
 class NumberBox : public Widget
 {
 protected:
-    int ertek;
+    int ertek, minErtek, maxErtek;
 public:
-    NumberBox(int _x, int _y, int _sx, int _sy);
+    NumberBox(int x, int y, int sx, int sy, int minErtek, int maxErtek);
 
     void draw() const override;
     void handle(genv::event event) override;
@@ -22,9 +22,12 @@ public:
 #endif // NUMBERBOX_HPP
 
 /*
-Ötletek
- * ha nem volt focusban és abban lett, akkor kijelölni az összes számot és teljesen újat lehessen írni
-    * ha még egyszer belekattint a user, akkor a szám végére lehessen írni
-    * a szám közepére is lehessen írni?
- *
+TODO:
+ * belekattintas -> a végére lehessen írni és egérrel mozgatni a cursort? (megkérdezni gyakvezt)
+    * sima cursor legyen benne? (pl belekattintaskor megjelenik és a szám végén van mindig)
+ * max és min. num, hogy ne menjen ki az int határból
+ * negatív számok beírásakot -> külön érzékelni, hogy a minusz gomb meg lett nyomba és úgy kezelni
+    * is_negative bool -> mező?
+ * egyéb grafikai szépítések: border, szebb gombok
+ * Max/Min: így működjön, vagy ha nagyobb/kisebb lenne a szám, akkor ne lehessen többet írni?
 */
