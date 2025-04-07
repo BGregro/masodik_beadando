@@ -2,7 +2,6 @@
 #define NUMBERBOX_HPP
 
 #include "widget.hpp"
-#include "graphics.hpp"
 
 class NumberBox : public Widget
 {
@@ -11,7 +10,7 @@ protected:
     int arrowX, arrowW, arrowH; // arrow buttons
     bool isNegative;
 public:
-    NumberBox(int _x, int _y, int _sx, int _sy, int minErtek, int maxErtek);
+    NumberBox(int _x, int _y, int _sx, int _sy, int _minErtek, int _maxErtek, App *parent);
 
     void draw() const override;
     void handle(genv::event event) override;

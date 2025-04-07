@@ -1,63 +1,14 @@
 #include <iostream>
-#include "graphics.hpp"
-#include "widget.hpp"
-#include "numberbox.hpp"
+#include "myapp.hpp"
 
 using namespace std;
 using namespace genv;
 
-const int szelesseg = 600, magassag = 600;
-
-
 int main()
 {
-    gout.open(szelesseg, magassag);
-    gout.load_font("LiberationMono-Regular.ttf", 20);
-
-    NumberBox *nb1 = new NumberBox(50, 50, 100, 50, 0, 2000000000);
-    NumberBox *nb2 = new NumberBox(50, 150, 100, 50, -500000, 500000);
-
-    vector<Widget*> widgets;
-    widgets.push_back(nb1);
-    widgets.push_back(nb2);
-
-    gout << refresh;
-
-    event ev;
-    int focus = -1;
-
-    for (Widget * w: widgets)
-        w->draw();
-
-    gout << refresh;
-
-    while(gin >> ev)
-    {
-        if (ev.type == ev_mouse && ev.button==btn_left)
-        {
-            for (size_t i=0;i<widgets.size();i++)
-            {
-                if (widgets[i]->is_selected(ev.pos_x, ev.pos_y))
-                {
-                    focus = i;
-                }
-            }
-        }
-
-        //cout << ev.keycode << " " << ev.keyname << " " << ev.keyutf8 << endl;
-
-        if (focus!=-1)
-        {
-            widgets[focus]->handle(ev);
-        }
-
-        for (Widget * w : widgets)
-        {
-            w->draw();
-        }
-
-        gout << refresh;
-    }
+    gout.load_font("LiberationMono-Regular.ttf", 20); // ezt hova tegyem?
+    myApp app(600,600);
+    app.event_loop();
 
     return 0;
 }

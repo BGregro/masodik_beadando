@@ -4,8 +4,10 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        app.cpp \
         main.cpp \
         graphics/graphics.cpp \
+        myapp.cpp \
         numberbox.cpp \
         widget.cpp
 
@@ -26,5 +28,9 @@ INCLUDEPATH += $$PWD/SDL2
 DEPENDPATH += $$PWD/SDL2
 
 HEADERS += \
+    app.hpp \
+    myapp.hpp \
     numberbox.hpp \
     widget.hpp
+
+DISTFILES +=

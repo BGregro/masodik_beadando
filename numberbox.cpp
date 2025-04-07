@@ -10,8 +10,8 @@ const color black(0,0,0), grey(200,200,200), white(255,255,255);
 const int defaultMin = 0, defaultMax = 100000;
 const int padding = 5;
 
-NumberBox::NumberBox(int _x, int _y, int _sx, int _sy, int _minErtek, int _maxErtek):
-    Widget(_x, _y, _sx, _sy), minErtek(_minErtek), maxErtek(_maxErtek)
+NumberBox::NumberBox(int _x, int _y, int _sx, int _sy, int _minErtek, int _maxErtek, App *parent):
+    Widget(_x, _y, _sx, _sy, parent), minErtek(_minErtek), maxErtek(_maxErtek)
 {
     isNegative = false;
 
@@ -20,7 +20,7 @@ NumberBox::NumberBox(int _x, int _y, int _sx, int _sy, int _minErtek, int _maxEr
 
     // ha a widget-be nem ferne bele a max szam
     int numW = gout.twidth("1");
-    int maxNumW = numW*(to_string(maxErtek).size()+1); // +1, hogy a negativ szamokkal se legyen gond
+    int maxNumW = numW*(to_string(maxErtek).size()+1); // +1, hogy a negativ szamok se logjanak ki
     if (maxNumW + arrowW > sx)
         sx = maxNumW + arrowW + padding;
 
@@ -48,6 +48,7 @@ void NumberBox::draw() const
 {
     // Draw main box background (number area + arrows)
     gout << white << move_to(x, y) << box(sx, sy);
+
 
     int numH = gout.cascent();
     int numW = gout.twidth("1");
@@ -121,13 +122,16 @@ void NumberBox::handle(event ev)
     else if (ev.type == ev_key && ev.keycode > 0) // key felengedésnél ne fusson le megegyszer
     {        
         if (ev.keycode == key_backspace)
+        {
             ertek = ertek/10;
+            if (ertek == 0) // ha 1 szamjegy van es torlunk, akkor vegye le a "-" jelet
+                isNegative = false;
+        }
 
         if (ertek == 0 && ev.keyname == "-") // ez igy jo?
         {
             isNegative = !isNegative;
         }
-
 
         if (!ev.keyutf8.empty() && ev.keyutf8.size() == 1 &&
             ev.keyutf8[0] >= '0' && ev.keyutf8[0] <= '9')
