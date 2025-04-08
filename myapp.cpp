@@ -19,24 +19,31 @@ myApp::myApp(int szelesseg, int magassag):
     gout << refresh;
 }
 
+Widget* myApp::selectWidget(int mx, int my)
+{
+    for (int i = 0; i < widgets.size(); ++i)
+    {
+        if (widgets[i]->is_selected(mx, my))
+            return widgets[i];
+    }
+
+    return 0;
+}
+
 void myApp::event_loop()
 {
     event ev;
-    int focus = -1;
 
     while(gin >> ev)
     {
-        if (ev.type == ev_mouse && ev.button==btn_left)
+        Widget *focus = 0;
+        if (ev.type == ev_mouse && ev.button == btn_left)
         {
-            for (int i = 0; i < widgets.size(); ++i)
-            {
-                if (widgets[i]->is_selected(ev.pos_x, ev.pos_y))
-                    focus = i;
-            }
+            focus = selectWidget(ev.pos_x, ev.pos_y);
         }
 
-        if (focus != -1)
-            widgets[focus]->handle(ev);
+        if (focus != 0)
+            focus->handle(ev);
 
         for (Widget *w: widgets)
             w->draw();
