@@ -10,7 +10,7 @@ protected:
     int arrowX, arrowW, arrowH; // arrow buttons
     bool isNegative;
 public:
-    NumberBox(int _x, int _y, int _minErtek, int _maxErtek, App *parent);
+    NumberBox(App *parent, int _x, int _y, int _minErtek, int _maxErtek);
 
     void draw() const override;
     void handle(genv::event event) override;

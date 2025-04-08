@@ -1,6 +1,7 @@
 #include "myapp.hpp"
 #include "graphics.hpp"
 #include "numberbox.hpp"
+#include "legordulowidget.hpp"
 #include <string>
 
 using namespace genv;
@@ -10,8 +11,11 @@ myApp::myApp(int szelesseg, int magassag):
     App(szelesseg, magassag)
 {
     // ezeket hova rakjam így?
-    new NumberBox(50, 50, 0, 99999999, this);
-    new NumberBox(50, 100, -1000000, 1000000, this);
+    new NumberBox(this, 50, 50, 0, 99999999);
+    new NumberBox(this, 50, 100, -1000000, 1000000);
+
+    vector<string> pelda1;
+    new LegorduloWidget(this, 50, 150, pelda1);
 
     for (Widget * wg : widgets)
         wg->draw();

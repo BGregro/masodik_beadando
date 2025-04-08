@@ -10,8 +10,8 @@ const color black(0,0,0), grey(200,200,200), white(255,255,255);
 const int defaultMin = 0, defaultMax = 100000;
 const int padding = 3;
 
-NumberBox::NumberBox(int _x, int _y, int _minErtek, int _maxErtek, App *parent):
-    Widget(_x, _y, 0, 0, parent), minErtek(_minErtek), maxErtek(_maxErtek)
+NumberBox::NumberBox(App *parent, int _x, int _y, int _minErtek, int _maxErtek):
+    Widget(parent, _x, _y, 0, 0), minErtek(_minErtek), maxErtek(_maxErtek)
 {
     isNegative = false;
 

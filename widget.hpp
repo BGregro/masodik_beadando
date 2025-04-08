@@ -8,10 +8,10 @@ class App;
 class Widget
 {
 protected:
-    int x, y, sx, sy;
     App *parent;
+    int x, y, sx, sy;
 public:
-    Widget(int x, int y, int sx, int sy, App *parent);
+    Widget(App *parent, int x, int y, int sx, int sy);
 
     virtual bool is_selected(int mx, int my);
     virtual void draw() const = 0;

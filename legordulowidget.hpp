@@ -9,9 +9,12 @@ class LegorduloWidget : public Widget
 {
 protected:
     std::vector<std::string> options;
+    int selectedIndex;
+    int arrowX, arrowW;
 public:
-    LegorduloWidget(int x, int y, int sx, int sy, App *parent);
+    LegorduloWidget(App *parent, int x, int y, std::vector<std::string> _options);
 
+    void arrowPressed(int mx, int my);
     void draw() const override;
     void handle(genv::event ev) override;
 };
