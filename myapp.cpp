@@ -14,8 +14,11 @@ myApp::myApp(int szelesseg, int magassag):
     new NumberBox(this, 50, 50, 0, 99999999);
     new NumberBox(this, 50, 100, -1000000, 1000000);
 
+    vector<string> pelda0 = {"option0", "option1", "option2", "option3"};
+    new LegorduloWidget(this, 50, 150, pelda0);
+
     vector<string> pelda1;
-    new LegorduloWidget(this, 50, 150, pelda1);
+    new LegorduloWidget(this, 50, 200, pelda1);
 
     for (Widget * wg : widgets)
         wg->draw();
@@ -37,20 +40,24 @@ Widget* myApp::selectWidget(int mx, int my)
 void myApp::event_loop()
 {
     event ev;
+    Widget *focus = 0;
 
     while(gin >> ev)
     {
-        Widget *focus = 0;
         if (ev.type == ev_mouse && ev.button == btn_left)
         {
             focus = selectWidget(ev.pos_x, ev.pos_y);
         }
 
-        if (focus != 0)
-            focus->handle(ev);
-
         for (Widget *w: widgets)
             w->draw();
+
+        // TODO: megcsinálni, hogy a kiválasztott widget draw-oljon felülre mindig
+        if (focus != 0)
+        {
+            focus->handle(ev);
+            focus->draw();
+        }
 
         // actionoket itt kezelni -> action(id)
 
@@ -58,6 +65,7 @@ void myApp::event_loop()
     }
 }
 
+// ebbe file írás és még mi?
 void myApp::action(string id)
 {
 

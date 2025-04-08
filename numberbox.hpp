@@ -21,4 +21,6 @@ public:
     void csokkentNum();
 };
 
+// TODO: pageUp, pageDown
+
 #endif // NUMBERBOX_HPP

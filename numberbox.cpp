@@ -15,7 +15,6 @@ NumberBox::NumberBox(App *parent, int _x, int _y, int _minErtek, int _maxErtek):
 {
     isNegative = false;
 
-
     // a widget meretei a szoveg meretei alapjan kiszamolva
     int numW = gout.twidth("1"), numH = gout.cascent();
     int maxNumW = numW*(to_string(maxErtek).size()+1); // +1, hogy a negativ szamok se logjanak ki
@@ -105,11 +104,11 @@ void NumberBox::draw() const
 
 void NumberBox::arrowPressed(int mx, int my)
 {
-    if (mx > arrowX && mx < x+sx)
+    if (mx >= arrowX && mx <= x+sx)
     {
-        if (my > y && my < y+sy/2)
+        if (my >= y && my <= y+sy/2)
             novelNum();
-        else if (my > y+sy/2 && my < y+sy)
+        else if (my > y+sy/2 && my <= y+sy)
             csokkentNum();
     }
 }

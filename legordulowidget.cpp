@@ -28,40 +28,42 @@ LegorduloWidget::LegorduloWidget(App *parent, int x, int y, vector<string> _opti
         options.push_back("Error: No Options Given");
 
     selectedIndex = 0;
+    opened = false;
 
     int maxW = maxTextWidth(options);
     arrowW = 20;
+    arrowH = gout.cascent() + gout.cdescent() + 2*padding;
+    // sx a legszelesebb szoveg szelessege lesz, hogy beleferjen
     sx = maxW + arrowW + 2*padding;
     arrowX = x + sx - arrowW;
     sy = gout.cascent() + gout.cdescent() + 2*padding;
 }
 
-// TODO: itt is úgy legyen beállítva a méret, hogy beleférjenek a szövegek (max szöveg mérettel)
-
 void LegorduloWidget::draw() const
 {
     gout << white << move_to(x, y) << box(sx, sy);
 
-    // Calculate text position (vertically centered)
-    int textY = y + (sy - gout.cascent() - gout.cdescent()) / 2;
+    int textY;
 
     // Draw the selected option text (if any)
     if (selectedIndex >= 0 && selectedIndex < options.size())
     {
+        textY = y + (sy - gout.cascent() - gout.cdescent()) / 2;
+        // draw selected option
         gout << black
              << move_to(x + padding, textY)
              << text(options[selectedIndex]);
     }
 
-    // Draw the arrow area
+    // arrow background
     gout << grey
          << move_to(arrowX, y)
-         << box(arrowW, sy);
+         << box(arrowW, arrowH);
 
-    // Draw the downward-pointing triangle
+    // down arrow
     int arrowCenterX = x + sx - arrowW/2;
-    int arrowTop = y + sy/4;
-    int arrowBottom = y + 3*sy/4;
+    int arrowTop = y + arrowH/4;
+    int arrowBottom = y + 3*arrowH/4;
 
     gout << black
          << move_to(arrowCenterX, arrowBottom)
@@ -71,12 +73,45 @@ void LegorduloWidget::draw() const
 
 }
 
-void LegorduloWidget::handle(event ev)
+void LegorduloWidget::clear_draw() const
 {
-
+    gout << black << move_to(x, y) << box(sx, sy);
 }
+
+// TODO: rajzolást megcsinálni legördüléshez
 
 void LegorduloWidget::arrowPressed(int mx, int my)
 {
+    if (mx >= arrowX && mx <= x+sx &&
+        my >= y && my <= y+arrowH)
+    {
+        if (opened)
+        {
+            opened = false;
+            clear_draw();
+            sy /= options.size();
+        }
+        else
+        {
+            opened = true;
+            sy *= options.size();
+        }
+    }
+}
+
+void LegorduloWidget::selectOption(int mx, int my)
+{
 
 }
+
+void LegorduloWidget::handle(event ev)
+{
+    if (ev.type == ev_mouse && ev.button == btn_left)
+    {
+        arrowPressed(ev.pos_x, ev.pos_y);
+
+
+    }
+}
+
+
