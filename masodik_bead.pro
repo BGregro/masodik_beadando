@@ -5,6 +5,7 @@ CONFIG -= qt
 
 SOURCES += \
         app.cpp \
+        legordulowidget.cpp \
         main.cpp \
         graphics/graphics.cpp \
         myapp.cpp \
@@ -29,6 +30,7 @@ DEPENDPATH += $$PWD/SDL2
 
 HEADERS += \
     app.hpp \
+    legordulowidget.hpp \
     myapp.hpp \
     numberbox.hpp \
     widget.hpp

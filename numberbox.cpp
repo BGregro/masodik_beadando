@@ -8,21 +8,21 @@ using namespace std;
 
 const color black(0,0,0), grey(200,200,200), white(255,255,255);
 const int defaultMin = 0, defaultMax = 100000;
-const int padding = 5;
+const int padding = 3;
 
-NumberBox::NumberBox(int _x, int _y, int _sx, int _sy, int _minErtek, int _maxErtek, App *parent):
-    Widget(_x, _y, _sx, _sy, parent), minErtek(_minErtek), maxErtek(_maxErtek)
+NumberBox::NumberBox(int _x, int _y, int _minErtek, int _maxErtek, App *parent):
+    Widget(_x, _y, 0, 0, parent), minErtek(_minErtek), maxErtek(_maxErtek)
 {
     isNegative = false;
 
-    arrowW = 30;
-    arrowH = sy/2;
 
-    // ha a widget-be nem ferne bele a max szam
-    int numW = gout.twidth("1");
+    // a widget meretei a szoveg meretei alapjan kiszamolva
+    int numW = gout.twidth("1"), numH = gout.cascent();
     int maxNumW = numW*(to_string(maxErtek).size()+1); // +1, hogy a negativ szamok se logjanak ki
-    if (maxNumW + arrowW > sx)
-        sx = maxNumW + arrowW + padding;
+    arrowW = 20;
+    sx = maxNumW + arrowW + padding;
+    sy = numH + 4*padding;
+    arrowH = sy/2;
 
     arrowX = x + sx - arrowW;
 
@@ -60,25 +60,30 @@ void NumberBox::draw() const
              << text("-")
              << move_to(x+padding + numW, y + sy/2 - numH/2)
              << text(to_string(abs(ertek)));
+
+        // draw cursor
+        gout << black
+             << move_to(x+padding + (to_string(abs(ertek)).size()+1)*numW, y+padding)
+             << line(0, sy-padding*2);
     }
     else
     {
         gout << black
              << move_to(x+padding, y + sy/2 - numH/2)
-             << text(to_string(abs(ertek)));
+             << text(to_string(ertek));
+
+        // draw cursor
+        gout << black
+             << move_to(x+padding + to_string(ertek).size()*numW, y+padding)
+             << line(0, sy-padding*2);
     }
 
-    // draw cursor
-    gout << black
-         << move_to(x+padding + to_string(ertek).size()*numW, y+5)
-         << line(0, sy-padding*2);
-
-    // background for arrows
+    // arrow background
     gout << grey
          << move_to(arrowX, y)
          << box(arrowW, arrowH*2);
 
-    // Draw up arrow button (top right)
+    // up arrow
     gout << black
          << move_to(arrowX + arrowW/2, y + padding)
          << line_to(arrowX + arrowW - padding, y + arrowH - padding)
@@ -90,7 +95,7 @@ void NumberBox::draw() const
          << move_to(arrowX, y + arrowH)
          << line_to(arrowX + arrowW, y + arrowH);
 
-    // Draw down arrow button (bottom right)
+    // down arrow
     gout << black
          << move_to(arrowX + arrowW/2, y + sy - padding)
          << line_to(arrowX + arrowW - padding, y + arrowH + padding)
@@ -128,18 +133,17 @@ void NumberBox::handle(event ev)
                 isNegative = false;
         }
 
-        if (ertek == 0 && ev.keyname == "-") // ez igy jo?
-        {
+        // negatív beallitasa, ha meg nem irtunk semmit
+        if (ertek == 0 && ev.keyname == "-" && minErtek < 0)
             isNegative = !isNegative;
-        }
 
         if (!ev.keyutf8.empty() && ev.keyutf8.size() == 1 &&
             ev.keyutf8[0] >= '0' && ev.keyutf8[0] <= '9')
         {
             // beírt szám beállítása -> erre külön fv.?
             int number = ev.keyutf8[0] - '0';
-            if (ertek*10 + number < maxErtek
-                && ertek*10 + number > minErtek)
+            if (ertek*10 + number <= maxErtek
+                && ertek*10 + number >= minErtek)
             {
                 ertek = ertek*10 + number;
             }

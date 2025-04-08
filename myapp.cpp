@@ -9,8 +9,9 @@ using namespace std;
 myApp::myApp(int szelesseg, int magassag):
     App(szelesseg, magassag)
 {
-    widgets.push_back(new NumberBox(50, 50, 100, 50, 0, 2000000000, this));
-    widgets.push_back(new NumberBox(50, 120, 100, 50, -500000, 500000, this));
+    // ezeket hova rakjam így?
+    new NumberBox(50, 50, 0, 99999999, this);
+    new NumberBox(50, 100, -1000000, 1000000, this);
 
     for (Widget * wg : widgets)
         wg->draw();
@@ -30,13 +31,11 @@ void myApp::event_loop()
             for (int i = 0; i < widgets.size(); ++i)
             {
                 if (widgets[i]->is_selected(ev.pos_x, ev.pos_y))
-                {
                     focus = i;
-                }
             }
         }
 
-        if (focus!=-1)
+        if (focus != -1)
             widgets[focus]->handle(ev);
 
         for (Widget *w: widgets)

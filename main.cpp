@@ -15,5 +15,5 @@ int main()
 
 /*
 Ötletek:
- * void select_widget(int mx, int my); function egér kattintás kezelésére
+ * Widget* select_widget(int mx, int my); function egér kattintás kezelésére
 */
