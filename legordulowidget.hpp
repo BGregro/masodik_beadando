@@ -9,7 +9,7 @@ class LegorduloWidget : public Widget
 {
 protected:
     std::vector<std::string> options;
-    int selectedIndex;
+    int textH, selectedIndex, hoverIndex;
     int arrowX, arrowW, arrowH;
     bool opened;
 public:
@@ -17,9 +17,12 @@ public:
 
     void draw() const override;
     void handle(genv::event) override;
-    void selectOption(int mx, int my);
 
+    void hoverOption(int mx, int my);
+    void selectOption(int mx, int my);
     void arrowPressed(int mx, int my);
+    void open_menu();
+    void close_menu();
     void clear_draw() const;
 };
 

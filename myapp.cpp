@@ -53,6 +53,7 @@ void myApp::event_loop()
             w->draw();
 
         // TODO: megcsinálni, hogy a kiválasztott widget draw-oljon felülre mindig
+            // legyen az app-ban egy focus field?
         if (focus != 0)
         {
             focus->handle(ev);
