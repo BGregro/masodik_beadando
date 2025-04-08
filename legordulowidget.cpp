@@ -45,8 +45,19 @@ void LegorduloWidget::draw() const
 
     int textY;
 
-    // Draw the selected option text (if any)
-    if (selectedIndex >= 0 && selectedIndex < options.size())
+    if (opened)
+    {
+        textY = y + padding;
+        for (string op: options)
+        {
+            gout << black
+                 << move_to(x + padding, textY)
+                 << text(op);
+
+            textY += gout.cascent() + gout.cdescent() + padding;
+        }
+    }
+    else
     {
         textY = y + (sy - gout.cascent() - gout.cdescent()) / 2;
         // draw selected option
