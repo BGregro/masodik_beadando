@@ -131,6 +131,11 @@ void NumberBox::handle(event ev)
             if (ertek == 0) // ha 1 szamjegy van es torlunk, akkor vegye le a "-" jelet
                 isNegative = false;
         }
+        else if (ev.keycode == key_pgdn) // TODO: ezt ellenorizni
+            ertek -= 10;
+        else if (ev.keycode == key_pgup)
+            ertek += 10;
+
 
         // negatív beallitasa, ha meg nem irtunk semmit
         if (ertek == 0 && ev.keyname == "-" && minErtek < 0)

@@ -26,6 +26,8 @@ public:
     void clear_draw() const;
 };
 
+// TODO: nyíl működjön mindig, a kivalasztott opcio legyen felül akkor is, amikor legordul
+// TODO: kovetelmenyek alapjan gorgetheto legyen a menu es meg lehessen adni a meretet (es min/max meretet meg lehessen adni)
 /*
 Ötletek
  * option hover? -> szürkére változik a háttere, amikor hover-oli (amikor le van nyitva)

@@ -69,5 +69,8 @@ void myApp::event_loop()
 // ebbe file írás és még mi?
 void myApp::action(string id)
 {
+    if (id == "enter")
+    {
 
+    }
 }
