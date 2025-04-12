@@ -14,13 +14,14 @@ public:
 
     void draw() const override;
     void handle(genv::event event) override;
-
     void arrowPressed(int mx, int my);
-    void setNum(int newNum);
+
+    void setErtek(int ujErtek);
     void novelNum();
     void csokkentNum();
-};
 
-// TODO: pageUp, pageDown
+    int getErtek() const;
+    std::string getValueString() const override;
+};
 
 #endif // NUMBERBOX_HPP

@@ -3,6 +3,7 @@
 #include "numberbox.hpp"
 #include "legordulowidget.hpp"
 #include <string>
+#include <fstream>
 
 using namespace genv;
 using namespace std;
@@ -10,7 +11,7 @@ using namespace std;
 myApp::myApp(int szelesseg, int magassag):
     App(szelesseg, magassag)
 {
-    // ezeket hova rakjam így?
+    focus = 0;
     new NumberBox(this, 50, 50, 0, 99999999);
     new NumberBox(this, 50, 100, -1000000, 1000000);
 
@@ -40,8 +41,6 @@ Widget* myApp::selectWidget(int mx, int my)
 void myApp::event_loop()
 {
     event ev;
-    Widget *focus = 0;
-
     while(gin >> ev)
     {
         if (ev.type == ev_mouse && ev.button == btn_left)
@@ -49,28 +48,40 @@ void myApp::event_loop()
             focus = selectWidget(ev.pos_x, ev.pos_y);
         }
 
-        for (Widget *w: widgets)
-            w->draw();
+        for (Widget *w : widgets)
+        {
+            if (w != focus)
+                w->draw();
+        }
 
-        // TODO: megcsinálni, hogy a kiválasztott widget draw-oljon felülre mindig
-            // legyen az app-ban egy focus field?
-        if (focus != 0)
+        if (focus != nullptr)
         {
             focus->handle(ev);
             focus->draw();
         }
 
-        // actionoket itt kezelni -> action(id)
+        if (ev.type == ev_key)
+        {
+            // action-ok kezelése
+            if (ev.keycode == key_enter)
+                action("enter");
+        }
 
         gout << refresh;
     }
 }
 
-// ebbe file írás és még mi?
 void myApp::action(string id)
 {
     if (id == "enter")
     {
+        ofstream outfile("kimenet.txt");
 
+        for (Widget *w : widgets)
+        {
+            outfile << w->getValueString() << "\n";
+        }
+
+        outfile.close();
     }
 }

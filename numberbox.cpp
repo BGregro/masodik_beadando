@@ -123,7 +123,7 @@ void NumberBox::handle(event ev)
         else
             isNegative = false;
     }
-    else if (ev.type == ev_key && ev.keycode > 0) // key felengedésnél ne fusson le megegyszer
+    else if (ev.type == ev_key && ev.keycode > 0) // key felengedesenel ne fusson le megegyszer
     {        
         if (ev.keycode == key_backspace)
         {
@@ -131,7 +131,7 @@ void NumberBox::handle(event ev)
             if (ertek == 0) // ha 1 szamjegy van es torlunk, akkor vegye le a "-" jelet
                 isNegative = false;
         }
-        else if (ev.keycode == key_pgdn && ertek-10 > minErtek) // TODO: ezt ellenorizni
+        else if (ev.keycode == key_pgdn && ertek-10 > minErtek)
             ertek -= 10;
         else if (ev.keycode == key_pgup && ertek+10 < maxErtek)
             ertek += 10;
@@ -145,20 +145,17 @@ void NumberBox::handle(event ev)
         if (!ev.keyutf8.empty() && ev.keyutf8.size() == 1 &&
             ev.keyutf8[0] >= '0' && ev.keyutf8[0] <= '9')
         {
-            // beírt szám beállítása -> erre külön fv.?
+            // beirt szam beallitasa
             int number = ev.keyutf8[0] - '0';
-            if (ertek*10 + number <= maxErtek
-                && ertek*10 + number >= minErtek)
-            {
-                ertek = ertek*10 + number;
-            }
+            setErtek(ertek*10 + number);
         }
     }
 }
 
-void NumberBox::setNum(int newNum)
+void NumberBox::setErtek(int ujErtek)
 {
-    ertek = newNum;
+    if (ertek <= maxErtek && ertek >= minErtek )
+        ertek = ujErtek;
 }
 
 void NumberBox::novelNum()
@@ -173,6 +170,15 @@ void NumberBox::csokkentNum()
         --ertek;
 }
 
+int NumberBox::getErtek() const
+{
+    return ertek;
+}
+
+string NumberBox::getValueString() const
+{
+    return to_string(ertek);
+}
 
 
 

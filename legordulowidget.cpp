@@ -220,4 +220,13 @@ void LegorduloWidget::handle(event ev)
     }
 }
 
+string LegorduloWidget::getSelected() const
+{
+    return options[selectedIndex];
+}
+
+string LegorduloWidget::getValueString() const
+{
+    return options[selectedIndex];
+}
 

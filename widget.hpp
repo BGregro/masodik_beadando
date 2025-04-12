@@ -16,6 +16,9 @@ public:
     virtual bool is_selected(int mx, int my);
     virtual void draw() const = 0;
     virtual void handle(genv::event ev) = 0;
+
+    virtual std::string getValueString() const { return ""; }
+
 };
 
 #endif // WIDGET_HPP

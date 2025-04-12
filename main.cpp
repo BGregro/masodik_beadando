@@ -11,8 +11,3 @@ int main()
 
     return 0;
 }
-
-/*
-Ötletek:
- * Widget* select_widget(int mx, int my); function egér kattintás kezelésére
-*/

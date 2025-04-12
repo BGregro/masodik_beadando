@@ -28,8 +28,9 @@ public:
     void open_menu();
     void close_menu();
     void clear_draw() const;
-};
 
-// TODO: nyíl működjön mindig + a kivalasztott opcio legyen felül akkor is, amikor legordul
+    std::string getSelected() const;
+    std::string getValueString() const override;
+};
 
 #endif // LEGORDULOWIDGET_HPP

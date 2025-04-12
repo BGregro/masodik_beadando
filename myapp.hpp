@@ -6,6 +6,8 @@
 
 class myApp : public App
 {
+protected:
+    Widget *focus;
 public:
     myApp(int szelesseg, int magassag);
 
