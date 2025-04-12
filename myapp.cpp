@@ -14,11 +14,11 @@ myApp::myApp(int szelesseg, int magassag):
     new NumberBox(this, 50, 50, 0, 99999999);
     new NumberBox(this, 50, 100, -1000000, 1000000);
 
-    vector<string> pelda0 = {"option0", "option1", "option2", "option3"};
-    new LegorduloWidget(this, 50, 150, pelda0);
+    vector<string> pelda0 = {"option0", "option1", "option2", "option3", "option4", "option5", "option6"};
+    new LegorduloWidget(this, 50, 150, 4, pelda0);
 
-    vector<string> pelda1;
-    new LegorduloWidget(this, 50, 200, pelda1);
+    vector<string> pelda1 = {"alma", "körte", "barack", "gyümölcstál"};
+    new LegorduloWidget(this, 50, 200, 3, pelda1);
 
     for (Widget * wg : widgets)
         wg->draw();

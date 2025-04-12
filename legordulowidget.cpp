@@ -1,6 +1,7 @@
 #include "legordulowidget.hpp"
 #include "graphics.hpp"
 #include <string>
+#include <iostream>
 
 using namespace genv;
 using namespace std;
@@ -21,12 +22,18 @@ int maxTextWidth(vector<string> v)
     return maxW;
 }
 
-LegorduloWidget::LegorduloWidget(App *parent, int x, int y, vector<string> _options):
-    Widget(parent, x, y, 0, 0), options(_options)
+LegorduloWidget::LegorduloWidget(App *parent, int x, int y, int _showCount, vector<string> _options):
+    Widget(parent, x, y, 0, 0), options(_options), showCount(_showCount)
 {
-    if (_options.size() == 0)
+    if (options.size() == 0)
+    {
         options.push_back("Error: No Options Given");
+        showCount = 1;
+    }
 
+    showCount = max(1, showCount); // ha 0 lenne megadva konstruktorban
+    visibleIndexes = getVisibleOptionIndexes();
+    startOption = 0;
     selectedIndex = 0;
     hoverIndex = -1;
     opened = false;
@@ -51,16 +58,24 @@ void LegorduloWidget::draw() const
 
     if (opened)
     {
-        gout << grey
-             << move_to(x, textY-padding + hoverIndex*textH)
-             << box(sx, textH);
+        int safeStart = min(startOption, max(0, (int)visibleIndexes.size() - showCount));
 
-        for (string op: options)
+        // highlight hovered option
+        if (hoverIndex >= 0 && hoverIndex < showCount &&
+            safeStart + hoverIndex < visibleIndexes.size())
         {
+            gout << grey
+                 << move_to(x, textY-padding + hoverIndex*textH)
+                 << box(sx, textH);
+        }
+
+        // draw visible options starting from safeStart
+        for (int i = 0; i < showCount && safeStart + i < visibleIndexes.size(); ++i)
+        {
+            int optionIndex = visibleIndexes[safeStart + i];
             gout << black
                  << move_to(x + padding, textY)
-                 << text(op);
-
+                 << text(options[optionIndex]);
             textY += textH;
         }
     }
@@ -98,14 +113,16 @@ void LegorduloWidget::clear_draw() const
 void LegorduloWidget::open_menu()
 {
     opened = true;
-    sy *= options.size();
+    visibleIndexes = getVisibleOptionIndexes();
+    startOption = 0;
+    sy = textH * min(showCount, (int)options.size());
 }
 
 void LegorduloWidget::close_menu()
 {
     opened = false;
     clear_draw();
-    sy /= options.size();
+    sy /= showCount;
 }
 
 void LegorduloWidget::arrowPressed(int mx, int my)
@@ -120,20 +137,50 @@ void LegorduloWidget::arrowPressed(int mx, int my)
     }
 }
 
+bool LegorduloWidget::clickedInside(int mx, int my)
+{
+    return mx >= x && mx <= x + sx &&
+           my >= y && my <= y + sy;
+}
+
+vector<int> LegorduloWidget::getVisibleOptionIndexes() const
+{
+    vector<int> indices;
+    indices.push_back(selectedIndex);
+
+    int nextIndex = (selectedIndex + 1) % options.size();
+    while (indices.size() < options.size())
+    {
+        if (nextIndex != selectedIndex)
+            indices.push_back(nextIndex);
+
+        nextIndex = (nextIndex + 1) % options.size();
+    }
+
+    return indices;
+}
+
 void LegorduloWidget::selectOption(int mx, int my)
 {
-    if (mx >= x && mx <= x + sx &&
-        my >= y && my <= y + sy)
+    if (clickedInside(mx, my))
     {
-        selectedIndex = (my-y) / textH;
+        int clickedPos = (my-y) / textH;
+
+        if (clickedPos >= 0 && startOption + clickedPos < visibleIndexes.size())
+        {
+            selectedIndex = visibleIndexes[startOption + clickedPos];
+            visibleIndexes = getVisibleOptionIndexes();
+            startOption = 0;
+            hoverIndex = -1;
+        }
+
         close_menu();
     }
 }
 
 void LegorduloWidget::hoverOption(int mx, int my)
 {
-    if (mx >= x && mx <= x + sx &&
-        my >= y && my <= y + sy)
+    if (clickedInside(mx, my))
         hoverIndex = (my-y) / textH;
 }
 
@@ -143,15 +190,32 @@ void LegorduloWidget::handle(event ev)
     {
         if (ev.button == btn_left)
         {
-            if (opened)
-                selectOption(ev.pos_x, ev.pos_y);
-
-            arrowPressed(ev.pos_x, ev.pos_y);
-
+            if (clickedInside(ev.pos_x, ev.pos_y))
+            {
+                if (opened)
+                    selectOption(ev.pos_x, ev.pos_y);
+                else
+                    arrowPressed(ev.pos_x, ev.pos_y);
+            }
+            else
+                close_menu();
         }
 
         if (opened)
-            hoverOption(ev.pos_x, ev.pos_y);
+        {
+            if (ev.button == btn_wheeldown)
+            {
+                if (startOption + showCount < visibleIndexes.size())
+                    ++startOption;
+            }
+            else if (ev.button == btn_wheelup)
+            {
+                if (startOption > 0)
+                    --startOption;
+            }
+        }
+
+        hoverOption(ev.pos_x, ev.pos_y);
 
     }
 }

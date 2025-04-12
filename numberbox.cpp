@@ -131,16 +131,17 @@ void NumberBox::handle(event ev)
             if (ertek == 0) // ha 1 szamjegy van es torlunk, akkor vegye le a "-" jelet
                 isNegative = false;
         }
-        else if (ev.keycode == key_pgdn) // TODO: ezt ellenorizni
+        else if (ev.keycode == key_pgdn && ertek-10 > minErtek) // TODO: ezt ellenorizni
             ertek -= 10;
-        else if (ev.keycode == key_pgup)
+        else if (ev.keycode == key_pgup && ertek+10 < maxErtek)
             ertek += 10;
 
 
-        // negatív beallitasa, ha meg nem irtunk semmit
+        // negativ beallitasa, ha meg nem irtunk semmit
         if (ertek == 0 && ev.keyname == "-" && minErtek < 0)
             isNegative = !isNegative;
 
+        // szam beirasa a widgetbe
         if (!ev.keyutf8.empty() && ev.keyutf8.size() == 1 &&
             ev.keyutf8[0] >= '0' && ev.keyutf8[0] <= '9')
         {
